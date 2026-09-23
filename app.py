@@ -14,7 +14,7 @@ def sign_up():
         if status:
             return jsonify({
                 "status":"sucess",
-                "message":f"{username} login sucessful."
+                "message":f"{username} login sucessful :)."
             }),200
         else:
             return jsonify({
