@@ -1,0 +1,103 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121214;
+    color: #e1e1e6;
+}
+
+/* Container Card */
+.login-container {
+    background-color: #202024;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.8rem;
+    color: #ffffff;
+}
+
+.subtitle {
+    color: #7c7c8a;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+/* Input Styles */
+.input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: #c4c4cc;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #121214;
+    border: 2px solid #29292e;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #8257e5; /* Nice purple accent */
+}
+
+/* Button */
+.btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8257e5;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    background-color: #9466ff;
+}
+
+/* Footer link */
+.footer-text {
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    color: #7c7c8a;
+    text-align: center;
+}
+
+.footer-text a {
+    color: #8257e5;
+    text-decoration: none;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}
