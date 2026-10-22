@@ -1,30 +1,64 @@
-from flask import Flask ,request ,jsonify,render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_cors import CORS
-from auth import getpass ,verify_register
+from auth import check_pass
 import json
-front=Flask(__name__)
+
+front = Flask(__name__)
 CORS(front)
-@front.route('/sign_up',methods=['POST'])
-def sign_up():
-    login=request.get_json()#collecting data from frontend and converting from json to dic.
-    username=login.get('username')#username from dict
-    password=login.get('password')#password from dict
+
+@front.route('/', methods=['GET'])
+@front.route('/login', methods=['GET'])
+def login_page():
+    return render_template('login.html')
+
+@front.route('/signup', methods=['GET'])
+def signup_page():
+    # Skip signup page and redirect straight to login
+    return redirect(url_for('login_page'))
+
+@front.route('/login', methods=['POST'])
+@front.route('/sign_up', methods=['POST'])
+def login():
+    login_data = request.get_json() or {}
+    username = login_data.get('username')
+    password = login_data.get('password')
+
+    if not username or not password:
+        return jsonify({
+            "status": "error",
+            "message": "Username and password are required!"
+        }), 400
+
     try:
-        status=verify_register(username,password)
+        status = check_pass(username, password)
         if status:
+            print(f"login by {username} is done.")
             return jsonify({
-                "status":"sucess",
-                "message":f"{username} login sucessful :)."
-            }),200
+                "status": "sucess",
+                "message": f"{username} login sucessful :)."
+                
+            }), 200
+        
+        elif status is False:
+            return jsonify({
+                "status": "error",
+                "message": "Invalid username or password!"
+            }), 401
+        elif status==10:
+            return jsonify({
+                "status":"error",
+                "message":"User not found :("
+            })
         else:
             return jsonify({
-                "status":"error!! username already exist "
-            }),401
+                "status": "error",
+                "message": "Database connection error! Please verify database status."
+            }), 500
     except Exception as e:
-        return jsonify({"status": "error", "message": "Server error, please try again."}), 500
-@front.route('/signup',methods=['GET'])
-def signup_page():
-    return render_template('signup.html')
+        return jsonify({
+            "status": "error",
+            "message": "Server error, please try again."
+        }), 500
 
 if __name__ == "__main__":
-    front.run(debug=True)  
+    front.run(debug=True)

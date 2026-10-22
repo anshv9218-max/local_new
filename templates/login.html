@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>login-Secure-Authentication</title>
-    <!-- <link rel ="stylesheet" href="{{url_for('static',filename='style.css')}}"> -->
-     <link rel="stylesheet" href="../static/style.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Login - Secure Authentication</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" onerror="this.onerror=null; this.href='/static/style.css';">
     </head>
     <body>
         <div class="login-container">
             <h2>Welcome !!</h2>
             <p class="subtitle">Please enter your details to sign in</p>
-            <form id="loginForm" >
+            <form id="loginForm">
                 <div class="input-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username">
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
                 </div>
-                <button Type="submit" class="btn-submit">Login</button>
-
+                <button type="submit" class="btn-submit">Login</button>
             </form>
-            <p>Don't have an account? <a href="/templates/signup.html">Sign up now </a></p>
         </div>
-        <!-- <script src="{{url_for('static',filename='script.js')}}"></script> -->
-         <script src="../static/script.js"></script>
+        <script src="{{ url_for('static', filename='script.js') }}" onerror="this.onerror=null; this.src='/static/script.js';"></script>
     </body>
 </html>

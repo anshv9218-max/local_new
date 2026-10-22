@@ -2,50 +2,58 @@
 const loginForm = document.getElementById('loginForm');
 
 // 2. Form ke submit event par listener lagao
-loginForm.addEventListener('submit', function (e) {
-    
-    // 3. CRITICAL: Browser ka default behavior (page redirect) roko
-    e.preventDefault();
+if (loginForm) {
+    loginForm.addEventListener('submit', function (e) {
+        
+        // 3. CRITICAL: Browser ka default behavior (page redirect) roko
+        e.preventDefault();
 
-    // 4. Input fields se values uthao (ek baar check kar lena HTML me yahi IDs hain na)
-    const usernameInput = document.getElementById('username').value;
-    const passwordInput = document.getElementById('password').value;
+        // 4. Input fields se values uthao
+        const usernameInput = document.getElementById('username').value.trim();
+        const passwordInput = document.getElementById('password').value;
 
-    // 5. Data ko ek simple object (dictionary) me taiyar karo
-    const formData = {
-        username: usernameInput,
-        password: passwordInput
-    };
+        // 5. Data ko ek simple object (dictionary) me taiyar karo
+        const formData = {
+            username: usernameInput,
+            password: passwordInput
+        };
 
-    console.log("Sending data to backend:", formData);
+        console.log("Sending data to backend:", formData);
 
-    // 6. Fetch API se Flask server ko POST request bhejo
-    // Kyunki app.py me route '@front.route('/sign_up')' hai, toh vahan hit marega
-    fetch('http://127.0.0.1:5000/sign_up', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Backend ko batane ke liye ki hum JSON bhej rahe hain
-        },
-        body: JSON.stringify(formData) // Object ko string me badal kar bheja
-    })
-    .then(response => {
-        // Response ka status check karo (200 matlab success, 401 matlab unauthorized)
-        if (response.status === 200) {
+        // 6. Fetch API URL setup:
+        // Agar Flask server (port 5000) se chal raha ho toh relative path '/login' use hoga,
+        // aur agar Live Server ya direct file se ho toh full URL 'http://127.0.0.1:5000/login' use hoga.
+        const apiUrl = (window.location.port === '5000' || window.location.host.includes(':5000'))
+            ? '/login'
+            : 'http://127.0.0.1:5000/login';
+
+        // Fetch API se Flask server ko POST request bhejo
+        fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Backend ko batane ke liye ki hum JSON bhej rahe hain
+            },
+            body: JSON.stringify(formData) // Object ko string me badal kar bheja
+        })
+        .then(response => {
             return response.json().then(data => {
-                alert("🎉 " + data.message); // Login successful ka alert aayega
-                // Yahan se tum page 2 par redirect kar sakte ho baad me:
-                // window.location.href = "page2.html";
+                // Response ka status check karo (200 matlab success, 401 matlab unauthorized)
+                if (response.status === 200) {
+                    alert("🎉 " + (data.message || data.status || "Login successful :)."));
+                } else if (response.status === 401) {
+                    const errorMsg = data.message || data.status || "Invalid credentials!";
+                    alert("❌ " + errorMsg);
+                } else {
+                    const serverMsg = data.message || data.status || ("Status code: " + response.status);
+                    alert("⚠️ " + serverMsg);
+                }
+            }).catch(() => {
+                alert("⚠️ Unexpected response! Status code: " + response.status);
             });
-        } else if (response.status === 401) {
-            return response.json().then(data => {
-                alert("❌ Error: " + data.message); // User not found ya galat password
-            });
-        } else {
-            alert("⚠️ Something went wrong! Status code: " + response.status);
-        }
-    })
-    .catch(error => {
-        console.error("Fetch error:", error);
-        alert("Server connect nahi ho pa raha! Pakka karo ki Flask server (app.py) chal raha hai.");
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            alert("Server connect nahi ho pa raha! Pakka karo ki Flask server (app.py) chal raha hai.");
+        });
     });
-});
+}
